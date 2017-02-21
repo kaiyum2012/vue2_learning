@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue 2.0</title>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+  <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+</head>
+<body>
+<div id="app">
+<div class="container-fluid">
+  <div class="col-md-6 col-lg-offset-3">
+    <form action="#" method="" role="form">
+    <legend>Tasker</legend>
+    <div class="form-group">
+      <label for="">Add Task</label>
+      <input type="text" class="form-control" id="" placeholder="add task" v-model="newtask">
+    </div>
+    <button type="Submit" class="btn btn-primary" @click="addTask">Submit</button>
+  </form>
+ <!--  <legend>All Task</legend>
+  <div>
+      <ol><li v-for="task in tasks">{{ task.description }}</li></ol>
+  </div> -->
+  <legend>Incomplete Task</legend>
+  <div>
+    <ol>
+      <li v-for="task in incompleteTasks" title="click me to mark as done" @click="markAsDone" :data-id="task.id" >{{ task.description }}</li>
+    </ol>
+  </div>
+  <legend>Complete Task</legend>
+  <div>
+    <ol>
+      <li v-for="task in completeTasks" title="click me to mark as working" @click="markAsUnDone" :data-id="task.id">{{task.description}}</li>
+    </ol>
+  </div>
+  </div>
+  </div>
+</div>
+</body>
+<script>
+		var app = new Vue({
+		el: "#app",
+    
+    mounted(){
+      console.log("app is mounted");
+    },
+		data:{
+      newtask: null,
+      tasks:[
+      // { id : 1,description: "hey there" , completed : false },
+      // { id : 2,description: "hey there" , completed : false },
+      // { id : 3,description: "hey there" , completed : false },
+      // { id : 4,description: "hey there" , completed : false },
+      // { id : 5,description: "hey there" , completed : false },
+      // { id : 6,description: "hey there" , completed : false },
+      // { id : 7,description: "hey there" , completed : false },
+      // { id : 8,description: "hey there" , completed : false },
+      ],
+    },
+    methods:{
+      addTask: function(){
+        event.preventDefault();
+          if(this.newtask){
+            var arr = this.tasks.map(function(task){
+              return task.id
+            });
+            var id = 0;  
+
+            if(arr.length == 0){
+              id = 1;
+            }else{
+              id = Math.max.apply(null,arr) + 1;
+            }
+          var newtask = { id : id , description:this.newtask,completed:false};
+          
+          this.tasks.push(newtask);
+          this.newtask='';
+         }
+      },
+      markAsDone: function($event){
+       var task_id = $event.target.attributes["data-id"].value;
+       console.log(task_id);
+       this.tasks.filter(function(task){
+          task.id == task_id ? task.completed = true : ''
+       }); 
+      },
+      markAsUnDone: function($event){
+       var task_id = $event.target.attributes["data-id"].value;
+       console.log(task_id);
+       this.tasks.filter(function(task){
+          task.id == task_id ? task.completed = false : ''
+       }); 
+      }
+    },
+    computed:{
+      incompleteTasks: function () {
+         return this.tasks.filter(function(task){
+          return !task.completed ? task : '';
+         });
+       },
+      completeTasks: function () {
+         return this.tasks.filter(function(task){
+          return task.completed ? task : '';
+         });
+       }       
+    }
+
+  });
+</script>
+
+</html>

@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>vue 2.0</title>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+New Task: <input type="text" name="new-task" id="new-task">
+<button id="add">Add</button>
+  <ul>
+  <li v-for="task in tasks" v-text="task"></li>
+  </ul>
+
+</div>
+</body>
+<script>
+		var app = new Vue({
+		el: "#app",
+    
+    mounted(){
+      console.log("app is mounted");
+    },
+		data:{
+      tasks:[
+        'task1',
+        'task2',
+        'task3',
+        'task4'
+      ],
+		}
+	});
+
+    // vanial JS, no Vue ;)
+    document.querySelector('button#add').addEventListener('click',function(){
+
+        var newtask= document.querySelector('input#new-task');
+
+        app.tasks.push(newtask.value);
+        newtask.value = '';
+    });
+
+</script>
+
+</html>

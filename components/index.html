@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Component</title>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.css">
+	<style type="text/css">
+		body{
+			padding-top: 25px;
+		}
+
+	</style>
+</head>
+<body>
+<div id="app" class="container">
+	<my-message title="hey there!" 
+	body = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Pellentesque risus mi, tempus quis placerat ut, porta nec nulla. Vestibulum rhoncus ac ex sit amet fringilla. Nullam gravida purus diam, et dictum felis venenatis efficitur. Aenean ac eleifend lacus, in mollis lectus. Donec sodales, arcu et sollicitudin porttitor, tortor urna tempor ligula, id porttitor mi magna a neque. Donec dui urna, vehicula et sem eget, facilisis sodales sem.">
+	</my-message>
+
+	<my-model body="I\'m injected using <span> props</span>" v-show="modelVisible" @close="ToggleModel">
+		<br>
+		<p> And i'm injected using <span>slot</span></p>
+
+	</my-model>
+
+	<button type="button" class="btn btn-default" @click="ToggleModel">Login</button>
+
+	<!-- Tabs section -->
+	<tabs>
+		<tab name="Music" :selected="true">
+			<h1> here is a content of tab Music </h1>
+		</tab>
+		<tab name="Movie">
+			<h1> here is a content of tab Movie </h1>
+		</tab>
+		<tab name="Game">
+			<h1> here is a content of tab Game </h1>
+		</tab>
+		<tab name="here is new">
+			<h1>some thig should be here dont you think!</h1>
+		</tab>
+	</tabs>
+
+
+</div>
+<script src="./main.js"></script>
+<!-- <script src="./tabs.js"></script> -->
+
+
+</script>
+</body>
+</html>

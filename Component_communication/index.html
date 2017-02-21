@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Vue2.0.Js</title>
+	<script src="https://unpkg.com/vue/dist/vue.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.3.1/css/bulma.css">
+	<style type="text/css">
+		body{
+			padding-top: 25px;
+			align-content: center;
+		}
+	</style>
+</head>
+<body>
+	<div id="app">
+		<!-- notification -->
+		<notification v-show="isNotified"></notification>
+
+		<section class="section">
+		    <div class="container">
+		      <div class="heading">
+		        <h1 class="title">Type/method 1</h1>
+		        <h2 class="subtitle">
+		          A child component will <strong>emit event</strong> and <strong>parent </strong> is listing!
+		        </h2>
+		      </div>
+				<child-component @fireup="parentListing"></child-component>
+				
+		    </div>
+	    </section>
+
+	    <section class="section">
+		    <div class="container">
+		      <div class="heading">
+		        <h1 class="title">Type/method 2 - Shared Vue instance</h1>
+		        <h2 class="subtitle">
+		          A child component will <strong>emit event</strong> and <strong>parent </strong> is listing!
+		        </h2>
+		      </div>
+				<child-component1 @fireup1="parentListing"></child-component1>
+				
+		    </div>
+	    </section>
+
+
+	</div>
+</body>
+
+<script src="./main.js"></script>
+</html>

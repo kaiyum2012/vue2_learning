@@ -1,24 +1,64 @@
 window.Event = new Vue();
 
+window.EventBus = new class{
+
+	constructor(){
+		this.vue = new Vue();
+	}
+
+	fire(event,data=null){
+		this.vue.$emit(event,data);
+	}
+
+	listen(event,callback){
+		this.vue.$on(event,callback);
+	}
+};
+
 Vue.component('notification',{
+	props:{
+		id:{require: true},
+		data: ''
+	},
 	template:`
-		<div class="container">
+	<div>
+		<div class="container" v-show="id == 1">
 			<div class="notification is-primary">
-  				<button class="delete" @click="$emit('hideNotification')"></button>
-				 Hey you done it !
+  				<button class="delete" @click="close"></button>
+				 Hey you done it ! calling from section --> {{ id }} and sending me {{ data }} huhhhh!
 			</div>
 		</div>
+		<div class="container" v-show="id == 2">
+			<div class="notification is-primary">
+  				<button class="delete" @click="close1"></button>
+				 Hey you done it ! calling from section --> {{ id }} and sending me {{ data }} huhhhh!
+			</div>
+		</div>
+		<div class="container" v-show="id == 3">
+			<div class="notification is-primary">
+  				<button class="delete" @click="close2"></button>
+				Hey you done it ! calling from section --> {{ id }} and sending me {{ data }} huhhhh!
+			</div>
+		</div>
+	</div>	
 	`,
 	data(){
 		return{
-			isActive:true
+			
 		}
 	},
   methods:{
-   
+   close:function(){
+   		this.$emit('toggle');
+   },
+   close1:function(){
+   		Event.$emit('notification',null);
+   },
+   close2:function(){
+   		EventBus.fire('notification',null);
+   }
   }
 });	
-
 
 Vue.component('child-component',{
 	template:
@@ -35,6 +75,7 @@ Vue.component('child-component',{
 	},
 	methods:{
 		emitFireUpEvent:function(){
+		if(this.value == 'undefine' || this.value == null) return;
 			this.$emit('fireup',this.value);
 		}
 	},
@@ -58,7 +99,30 @@ Vue.component('child-component1',{
 	},
 	methods:{
 		emitFireUpEvent:function(){
-			Event.$emit('fireup1',this.value);
+			Event.$emit('notification',this.value);
+		}
+	},
+	mounted(){
+		console.log("child-component1 is mounted");
+	}
+});
+
+Vue.component('child-component2',{
+	template:
+	`<div >
+	<label class="label">Name</label>
+	<p class="control">
+	  <input class="input" type="text" placeholder="put some input" @blur="emitFireUpEvent" v-model:value="value"/>
+	</p></div>
+	`,
+	data(){
+		return{
+			value:null
+		}
+	},
+	methods:{
+		emitFireUpEvent:function(){
+			EventBus.fire('notification',this.value);
 		}
 	},
 	mounted(){
@@ -67,51 +131,44 @@ Vue.component('child-component1',{
 });
 
 
+
 var app = new Vue({
 	el:'#app',
 	data:{
-		isNotified:false
+		isNotified:false,
+		callerId :null,
+		injectedData : ''
 	},
 	methods:{
-		parentListing:function(data){
-			this.isNotified = true;
-			console.log("yeah i'm listing, You send me this " + data);
-
-		},
-
-	    hideNotification:function(){
-	      console.log("asdad");
-	      this.isNotified = false;
-	    }
+		//  this is for child-component
+		parentHandlingEventForInput:function(data){
+			this.callerId = 1;
+			this.isNotified = !this.isNotified;
+			this.injectedData = data;
+			// console.log("yeah i'm listing child-component, You send me " + data + "And notification status is =" + this.isNotified );
+		}
 	},
 	created(){
-		Event.$on('fireup1',function(){
-			console.log("fireup1");
-			this.isNotified = true;
+		// this is for handling child-component1 events using Shaed EVENT vue instance
+		Event.$on('notification',function(data){
+			app.callerId = 2;
+			app.isNotified = !app.isNotified; // Important --> refer to 'app' rather then 'this'
+			app.injectedData = data;
+			// console.log("yeah i'm listing child-component1, You send me " + data + "And notification status is = " + app.isNotified );
 		});
 
-		Event.$on('hideNotification',function(){
-			console.log("hideNotification");
-			this.isNotified = false;
+		// this is for handling child-component2 events using EVENTBUS vue wrapper
+		EventBus.listen('notification',function(data){
+			app.callerId = 3;
+			app.isNotified = !app.isNotified; // Important --> refer to 'app' rather then 'this'
+			app.injectedData = data;
+			// console.log("yeah i'm listing child-component1, You send me " + data + "And notification status is = " + app.isNotified );
 		});
 	}
 });
 
 
 
-// Window.Event = new class{
 
-// 	constructor(){
-// 		this.vue = new Vue();
-// 	}
-
-// 	fire(event,data=null){
-// 		this.vue.$emit(event,data);
-// 	}
-
-// 	listen(event,callback){
-// 		this.vue.on(event,callback);
-// 	}
-// };
 
 

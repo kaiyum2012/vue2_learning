@@ -14,8 +14,8 @@
 <body>
 	<div id="app">
 		<!-- notification -->
-		<notification v-show="isNotified"></notification>
-
+		<notification v-show="isNotified" @toggle="parentHandlingEventForInput" :id="callerId" :data="injectedData"></notification>
+		
 		<section class="section">
 		    <div class="container">
 		      <div class="heading">
@@ -24,7 +24,7 @@
 		          A child component will <strong>emit event</strong> and <strong>parent </strong> is listing!
 		        </h2>
 		      </div>
-				<child-component @fireup="parentListing"></child-component>
+				<child-component @fireup="parentHandlingEventForInput"></child-component>
 				
 		    </div>
 	    </section>
@@ -37,7 +37,20 @@
 		          A child component will <strong>emit event</strong> and <strong>parent </strong> is listing!
 		        </h2>
 		      </div>
-				<child-component1 @fireup1="parentListing"></child-component1>
+				<child-component1></child-component1>
+				
+		    </div>
+	    </section>
+
+	    <section class="section">
+		    <div class="container">
+		      <div class="heading">
+		        <h1 class="title">Type/method 3 - Shared Vue Wrapper Class</h1>
+		        <h2 class="subtitle">
+		          A child component will <strong>emit event</strong> and <strong>parent </strong> is listing!
+		        </h2>
+		      </div>
+				<child-component2></child-componen2>
 				
 		    </div>
 	    </section>
